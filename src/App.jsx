@@ -17,7 +17,7 @@ const P = {
 };
 
 // ── LOGO SVG COMPONENT ──────────────────────────────────
-function Logo({ height = 36, light = false }) {
+function Logo({ height = 44, light = false }) {
   const textColor = light ? "#fff" : P.text;
   const subColor = light ? P.yellow : P.purple;
   const arc1Color = light ? "rgba(255,255,255,0.45)" : P.purple;
@@ -142,7 +142,7 @@ export default function TechoVenezuela() {
           <div style={{ position:"absolute", bottom:-60, left:-60, width:280, height:280, borderRadius:"50%", background:"rgba(214,51,132,0.10)" }} />
           <div style={{ maxWidth:680, margin:"0 auto", position:"relative", zIndex:1 }}>
             <div style={{ display:"flex", justifyContent:"center", marginBottom:32 }}>
-              <Logo height={48} light={true} />
+              <Logo height={60} light={true} />
             </div>
             <h1 style={{ fontFamily:"Inter,sans-serif", fontSize:52, fontWeight:900, color:"#fff", lineHeight:1.1, marginBottom:24, letterSpacing:"-1px" }}>
               Si tienes espacio,<br /><span style={{ color:P.yellow }}>alguien lo necesita hoy.</span>
