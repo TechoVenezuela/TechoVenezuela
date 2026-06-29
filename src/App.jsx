@@ -17,7 +17,7 @@ const P = {
 };
 
 // ── LOGO SVG COMPONENT ──────────────────────────────────
-function Logo({ height = 44, light = false }) {
+function Logo({ height = 60, light = false }) {
   const textColor = light ? "#fff" : P.text;
   const subColor = light ? P.yellow : P.purple;
   const arc1Color = light ? "rgba(255,255,255,0.45)" : P.purple;
