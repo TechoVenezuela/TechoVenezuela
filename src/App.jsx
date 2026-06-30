@@ -124,7 +124,7 @@ export default function TechoVenezuela() {
       <nav style={{ background:P.white, borderBottom:`1px solid ${P.border}`, padding:"0 24px", position:"sticky", top:0, zIndex:100, boxShadow:"0 1px 8px rgba(123,63,160,0.08)" }}>
         <div style={{ maxWidth:1080, margin:"0 auto", display:"flex", alignItems:"center", justifyContent:"space-between", height:62 }}>
           <div style={{ cursor:"pointer" }} onClick={() => setView("home")}>
-            <Logo height={36} />
+            <Logo height={44} />
           </div>
           <div style={{ display:"flex", gap:28, alignItems:"center" }}>
             <span className={`nav-lnk ${view==="listings"?"active":""}`} onClick={() => setView("listings")}>Buscar techo</span>
@@ -142,7 +142,7 @@ export default function TechoVenezuela() {
           <div style={{ position:"absolute", bottom:-60, left:-60, width:280, height:280, borderRadius:"50%", background:"rgba(214,51,132,0.10)" }} />
           <div style={{ maxWidth:680, margin:"0 auto", position:"relative", zIndex:1 }}>
             <div style={{ display:"flex", justifyContent:"center", marginBottom:32 }}>
-              <Logo height={48} light={true} />
+              <Logo height={60} light={true} />
             </div>
             <h1 style={{ fontFamily:"Inter,sans-serif", fontSize:52, fontWeight:900, color:"#fff", lineHeight:1.1, marginBottom:24, letterSpacing:"-1px" }}>
               Si tienes espacio,<br /><span style={{ color:P.yellow }}>alguien lo necesita hoy.</span>
@@ -244,9 +244,10 @@ export default function TechoVenezuela() {
               </p>
               {/* Sub-nav */}
               <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap", marginTop:36 }}>
-                {[["quienes","Quiénes somos"],["porque","Por qué existimos"],["seguridad","Cómo cuidamos la seguridad"]].map(([id,label]) => (
+                {[["quienes","Quiénes somos"],["porque","Por qué existimos"]].map(([id,label]) => (
                   <a key={id} href={`#${id}`} style={{ background:"rgba(255,255,255,0.15)", color:"#fff", padding:"8px 18px", borderRadius:20, fontSize:13, fontWeight:600, textDecoration:"none", border:"1px solid rgba(255,255,255,0.3)" }}>{label}</a>
                 ))}
+                <span onClick={() => setView("seguridad")} style={{ background:P.yellow, color:P.purple, padding:"8px 18px", borderRadius:20, fontSize:13, fontWeight:700, cursor:"pointer" }}>🔒 Cómo cuidamos la seguridad</span>
               </div>
             </div>
           </div>
@@ -328,43 +329,13 @@ export default function TechoVenezuela() {
               </div>
             </div>
 
-            {/* ── SEGURIDAD / VETTING ── */}
-            <div id="seguridad" style={{ marginBottom:56 }}>
-              <div style={{ display:"inline-block", background:P.lilaBg, color:P.purple, fontSize:11, fontWeight:700, padding:"4px 12px", borderRadius:20, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:16 }}>Seguridad</div>
-              <h2 style={{ fontSize:32, fontWeight:900, color:P.purple, marginBottom:12, letterSpacing:"-0.5px", lineHeight:1.2 }}>Cómo cuidamos la seguridad</h2>
-              <p style={{ fontSize:16, lineHeight:1.85, color:"#4A3560", marginBottom:16 }}>
-                Techo Venezuela no funciona como un sistema automático. Cada solicitud y cada oferta de alojamiento pasa por una revisión humana antes de ser conectada.
-              </p>
-              <p style={{ fontSize:16, lineHeight:1.85, color:"#4A3560", marginBottom:40 }}>
-                Sabemos que abrir una casa requiere confianza. También sabemos que pedir refugio en un momento vulnerable requiere protección. Por eso nuestro proceso está diseñado para reducir riesgos para ambas partes.
-              </p>
-
-              <div style={{ display:"flex", flexDirection:"column", gap:16, marginBottom:40 }}>
-                {[
-                  { n:"1", title:"Registro separado", desc:"Las personas que ofrecen alojamiento y las personas que necesitan alojamiento completan formularios distintos. Esto nos permite entender la situación de cada lado antes de hacer cualquier conexión." },
-                  { n:"2", title:"Verificación básica de identidad", desc:"Solicitamos datos de contacto, documento de identidad cuando sea posible, teléfono verificable y, en algunos casos, una videollamada corta o confirmación por referencia." },
-                  { n:"3", title:"Revisión del espacio ofrecido", desc:"Pedimos información sobre la ubicación aproximada, tipo de espacio, capacidad, condiciones básicas, acceso a baño, agua, electricidad cuando exista, privacidad, presencia de mascotas, niños u otras personas en la vivienda." },
-                  { n:"4", title:"Confirmación de seguridad mínima", desc:"No publicamos direcciones exactas de forma abierta. La dirección completa solo se comparte cuando hay una posible coincidencia y ambas partes han sido contactadas." },
-                  { n:"5", title:"Priorización de casos vulnerables", desc:"Cuando hay muchas solicitudes, priorizamos familias con niños, personas mayores, personas con discapacidad, mujeres solas, personas con necesidades médicas y casos donde la vivienda ya no es habitable." },
-                  { n:"6", title:"Match humano", desc:"No asignamos personas automáticamente. Revisamos compatibilidad básica: zona, número de personas, duración estimada, necesidades especiales, disponibilidad del espacio y condiciones del anfitrión." },
-                  { n:"7", title:"Acuerdo claro entre las partes", desc:"Antes de confirmar, ambas partes reciben por escrito las condiciones básicas: duración prevista, número de personas, normas de convivencia, qué se ofrece y qué no se ofrece." },
-                  { n:"8", title:"Seguimiento", desc:"Después del contacto inicial, intentamos hacer seguimiento para confirmar que la conexión ocurrió y que no se reportaron problemas." },
-                ].map(({ n, title, desc }) => (
-                  <div key={n} style={{ display:"flex", gap:20, background:P.cardBg, borderRadius:14, padding:"22px 24px", border:`1.5px solid ${P.border}`, alignItems:"flex-start" }}>
-                    <div style={{ background:P.purple, color:"#fff", width:36, height:36, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:900, flexShrink:0 }}>{n}</div>
-                    <div>
-                      <h3 style={{ fontSize:15, fontWeight:800, color:P.purple, marginBottom:6 }}>{title}</h3>
-                      <p style={{ fontSize:14, color:"#4A3560", lineHeight:1.7 }}>{desc}</p>
-                    </div>
-                  </div>
-                ))}
+            {/* ── LINK A SEGURIDAD ── */}
+            <div onClick={() => setView("seguridad")} style={{ background:`linear-gradient(135deg,${P.purpleDk},${P.purple})`, borderRadius:20, padding:"36px 32px", marginBottom:56, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"space-between", gap:20, flexWrap:"wrap" }}>
+              <div>
+                <h3 style={{ fontSize:20, fontWeight:900, color:"#fff", marginBottom:8 }}>🔒 Cómo cuidamos la seguridad</h3>
+                <p style={{ color:"rgba(255,255,255,0.75)", fontSize:14 }}>Nuestro proceso de verificación, los 8 pasos y el contrato entre las partes.</p>
               </div>
-
-              <div style={{ background:"#FFF9EC", border:`1.5px solid ${P.yellow}`, borderRadius:16, padding:"28px 32px" }}>
-                <p style={{ fontSize:15, color:"#5A4A00", lineHeight:1.8 }}>
-                  <strong>Este proceso no elimina todos los riesgos.</strong> Ningún proceso puede hacerlo. Pero sí crea una capa de revisión, cuidado y responsabilidad para que la ayuda no dependa solo de mensajes reenviados por WhatsApp o publicaciones sueltas en redes sociales.
-                </p>
-              </div>
+              <span style={{ background:P.yellow, color:P.purple, padding:"12px 24px", borderRadius:10, fontWeight:800, fontSize:14, whiteSpace:"nowrap" }}>Ver proceso →</span>
             </div>
 
             {/* Contacto */}
@@ -380,7 +351,154 @@ export default function TechoVenezuela() {
         </div>
       )}
 
-      {/* ══════ LISTINGS ══════ */}
+      {/* ══════ CÓMO CUIDAMOS LA SEGURIDAD — página propia ══════ */}
+      {view === "seguridad" && (
+        <div>
+          <div style={{ background:`linear-gradient(135deg,${P.purple},${P.purpleDk})`, padding:"72px 24px", textAlign:"center" }}>
+            <div style={{ maxWidth:700, margin:"0 auto" }}>
+              <div style={{ fontSize:44, marginBottom:16 }}>🔒</div>
+              <h1 style={{ fontSize:40, fontWeight:900, color:"#fff", lineHeight:1.15, marginBottom:18, letterSpacing:"-1px" }}>
+                Cómo cuidamos la seguridad
+              </h1>
+              <p style={{ color:"rgba(255,255,255,0.75)", fontSize:17, lineHeight:1.75 }}>
+                Cada solicitud y cada oferta de alojamiento pasa por una revisión humana antes de ser conectada.
+              </p>
+            </div>
+          </div>
+
+          <div style={{ maxWidth:800, margin:"0 auto", padding:"64px 24px" }}>
+
+            <p style={{ fontSize:16, lineHeight:1.9, color:"#4A3560", marginBottom:16 }}>
+              Techo Venezuela no funciona como un sistema automático. Cada solicitud y cada oferta de alojamiento pasa por una revisión humana antes de ser conectada.
+            </p>
+            <p style={{ fontSize:16, lineHeight:1.9, color:"#4A3560", marginBottom:48 }}>
+              Sabemos que abrir una casa requiere confianza. También sabemos que pedir refugio en un momento vulnerable requiere protección. Por eso nuestro proceso está diseñado para reducir riesgos para ambas partes.
+            </p>
+
+            <div style={{ display:"flex", flexDirection:"column", gap:16, marginBottom:48 }}>
+              {[
+                { n:"1", title:"Registro separado", desc:"Las personas que ofrecen alojamiento y las personas que necesitan alojamiento completan formularios distintos. Esto nos permite entender la situación de cada lado antes de hacer cualquier conexión." },
+                { n:"2", title:"Verificación básica de identidad", desc:"Solicitamos datos de contacto, documento de identidad cuando sea posible, teléfono verificable y, en algunos casos, una videollamada corta o confirmación por referencia." },
+                { n:"3", title:"Revisión del espacio ofrecido", desc:"Pedimos información sobre la ubicación aproximada, tipo de espacio, capacidad, condiciones básicas, acceso a baño, agua, electricidad cuando exista, privacidad, presencia de mascotas, niños u otras personas en la vivienda." },
+                { n:"4", title:"Confirmación de seguridad mínima", desc:"No publicamos direcciones exactas de forma abierta. La dirección completa solo se comparte cuando hay una posible coincidencia y ambas partes han sido contactadas." },
+                { n:"5", title:"Priorización de casos vulnerables", desc:"Cuando hay muchas solicitudes, priorizamos familias con niños, personas mayores, personas con discapacidad, mujeres solas, personas con necesidades médicas y casos donde la vivienda ya no es habitable." },
+                { n:"6", title:"Match humano", desc:"No asignamos personas automáticamente. Revisamos compatibilidad básica: zona, número de personas, duración estimada, necesidades especiales, disponibilidad del espacio y condiciones del anfitrión." },
+                { n:"7", title:"Acuerdo claro entre las partes", desc:"Antes de confirmar, ambas partes reciben por escrito las condiciones básicas: duración prevista, número de personas, normas de convivencia, qué se ofrece y qué no se ofrece." },
+                { n:"8", title:"Seguimiento", desc:"Después del contacto inicial, intentamos hacer seguimiento para confirmar que la conexión ocurrió y que no se reportaron problemas." },
+              ].map(({ n, title, desc }) => (
+                <div key={n} style={{ display:"flex", gap:20, background:P.cardBg, borderRadius:14, padding:"22px 24px", border:`1.5px solid ${P.border}`, alignItems:"flex-start" }}>
+                  <div style={{ background:P.purple, color:"#fff", width:36, height:36, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:900, flexShrink:0 }}>{n}</div>
+                  <div>
+                    <h3 style={{ fontSize:15, fontWeight:800, color:P.purple, marginBottom:6 }}>{title}</h3>
+                    <p style={{ fontSize:14, color:"#4A3560", lineHeight:1.7 }}>{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* CONTRATO */}
+            <div style={{ background:`linear-gradient(135deg,${P.purpleDk},${P.purple})`, borderRadius:20, padding:"40px 36px", marginBottom:40 }}>
+              <div style={{ fontSize:32, marginBottom:16, textAlign:"center" }}>📄</div>
+              <h2 style={{ fontSize:24, fontWeight:900, color:"#fff", marginBottom:18, textAlign:"center", letterSpacing:"-0.5px" }}>Un acuerdo formal, no una promesa verbal</h2>
+              <p style={{ color:"rgba(255,255,255,0.85)", fontSize:15, lineHeight:1.85, marginBottom:18 }}>
+                Para que la ayuda sea segura para ambas partes, tanto el anfitrión como la persona alojada reciben y firman un <strong style={{ color:P.yellow }}>acuerdo de convivencia temporal</strong> antes de iniciar la estadía. Este acuerdo deja por escrito las condiciones básicas: quién aloja a quién, cuántas personas, qué se ofrece, qué se espera de cada parte y las normas mínimas de convivencia.
+              </p>
+              <p style={{ color:"rgba(255,255,255,0.85)", fontSize:15, lineHeight:1.85, marginBottom:18 }}>
+                El acuerdo tiene una <strong style={{ color:P.yellow }}>duración inicial de una semana</strong>. Esto protege a ambas partes: le da al anfitrión la tranquilidad de que el compromiso no es indefinido, y le da a la persona alojada un plazo claro para organizar sus próximos pasos sin la presión de una fecha límite improvisada.
+              </p>
+              <p style={{ color:"rgba(255,255,255,0.85)", fontSize:15, lineHeight:1.85 }}>
+                Si al final de esa semana ambas partes desean continuar, el acuerdo <strong style={{ color:P.yellow }}>puede renovarse o extenderse de mutuo acuerdo</strong>, las veces que sea necesario. Ninguna extensión es automática — siempre requiere la conformidad explícita de ambas personas.
+              </p>
+            </div>
+
+            <div style={{ background:"#FFF9EC", border:`1.5px solid ${P.yellow}`, borderRadius:16, padding:"28px 32px", marginBottom:40 }}>
+              <p style={{ fontSize:15, color:"#5A4A00", lineHeight:1.8 }}>
+                <strong>Este proceso no elimina todos los riesgos.</strong> Ningún proceso puede hacerlo. Pero sí crea una capa de revisión, cuidado y responsabilidad para que la ayuda no dependa solo de mensajes reenviados por WhatsApp o publicaciones sueltas en redes sociales.
+              </p>
+            </div>
+
+            <div style={{ textAlign:"center" }}>
+              <span onClick={() => setView("legal")} style={{ color:P.fuschia, fontWeight:700, cursor:"pointer", fontSize:14 }}>Leer el Aviso Legal completo →</span>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* ══════ AVISO LEGAL ══════ */}
+      {view === "legal" && (
+        <div style={{ maxWidth:760, margin:"0 auto", padding:"56px 24px" }}>
+          <h1 style={{ fontSize:30, fontWeight:900, color:P.purple, marginBottom:6, letterSpacing:"-0.5px" }}>Aviso legal y limitación de responsabilidad</h1>
+          <p style={{ color:P.muted, fontSize:14, marginBottom:40 }}>Techo Venezuela · Última actualización: junio 2026</p>
+
+          {[
+            { t:"1. Naturaleza de la iniciativa", p:[
+              "Techo Venezuela es una iniciativa ciudadana y solidaria creada para facilitar la conexión entre personas afectadas por una situación de emergencia en Venezuela que necesitan alojamiento temporal y personas que voluntariamente ofrecen un espacio de acogida.",
+              "Techo Venezuela no es una agencia inmobiliaria, hotel, plataforma comercial de hospedaje, servicio de emergencia, organismo público, autoridad de protección civil, entidad médica, empresa de seguridad ni proveedor profesional de alojamiento.",
+              "La finalidad de esta iniciativa es servir como puente de conexión, de forma gratuita, entre personas que solicitan ayuda y personas que desean ofrecer apoyo.",
+            ]},
+            { t:"2. Ausencia de relación contractual de hospedaje", p:[
+              "Techo Venezuela no es parte del acuerdo de alojamiento que pueda establecerse entre la persona solicitante y la persona anfitriona.",
+              "Cualquier acuerdo, condición, duración de estancia, normas de convivencia, acceso al espacio, uso de servicios, transporte, alimentación u otros aspectos prácticos deberán ser acordados directamente entre la persona solicitante y la persona anfitriona.",
+              "Techo Venezuela no cobra comisiones, no gestiona pagos, no administra inmuebles, no alquila espacios y no actúa como representante legal de ninguna de las partes.",
+            ]},
+            { t:"3. Revisión de información y proceso de conexión", p:[
+              "Techo Venezuela podrá solicitar información básica a las personas solicitantes y anfitrionas con el objetivo de revisar cada caso y facilitar conexiones más seguras y responsables.",
+              "Esta revisión puede incluir, entre otros datos, identidad, datos de contacto, ubicación aproximada, composición del grupo familiar, necesidades especiales, disponibilidad del espacio, condiciones básicas del alojamiento y referencias cuando sea posible.",
+              "El proceso de revisión busca reducir riesgos, pero no constituye una garantía absoluta sobre la identidad, conducta, antecedentes, seguridad, condiciones personales o veracidad total de la información facilitada por ninguna persona.",
+              "Techo Venezuela no garantiza que todas las solicitudes reciban alojamiento ni que todas las ofertas sean finalmente asignadas.",
+            ]},
+            { t:"4. Seguridad y responsabilidad de las partes", p:[
+              "Cada persona que utilice Techo Venezuela es responsable de proporcionar información verdadera, completa y actualizada.",
+              "Las personas anfitrionas son responsables de asegurarse de que el espacio ofrecido sea seguro, digno y adecuado para el uso temporal que declaran.",
+              "Las personas solicitantes son responsables de informar de forma clara sus necesidades, número real de personas, situación de vulnerabilidad, condiciones médicas relevantes, presencia de niños, mascotas u otras circunstancias importantes para la convivencia.",
+              "Ambas partes deberán actuar con buena fe, respeto, prudencia y responsabilidad.",
+              "Techo Venezuela recomienda que ninguna persona comparta direcciones exactas, documentos sensibles, fotografías de menores, datos bancarios o información privada fuera de los canales indicados hasta que exista una revisión previa y una conexión razonablemente validada.",
+            ]},
+            { t:"5. Limitación de responsabilidad", p:[
+              "En la medida máxima permitida por la ley aplicable, Techo Venezuela, sus fundadores, voluntarios, colaboradores, aliados, donantes o entidades de apoyo no serán responsables por daños, pérdidas, conflictos, accidentes, lesiones, enfermedades, robos, incumplimientos, comportamientos indebidos, disputas personales, daños materiales, daños morales, cancelaciones, desalojos, falta de disponibilidad del alojamiento o cualquier otra situación que pueda surgir como consecuencia directa o indirecta de la relación entre personas solicitantes y anfitrionas.",
+              "Techo Venezuela no puede garantizar la seguridad absoluta de las personas, viviendas, zonas geográficas, condiciones sanitarias, servicios públicos, infraestructura, transporte o entorno donde se encuentre el alojamiento ofrecido.",
+              "Nada en este aviso pretende excluir responsabilidades que no puedan ser excluidas conforme a la ley aplicable.",
+            ]},
+            { t:"6. No sustitución de servicios de emergencia", p:[
+              "Techo Venezuela no sustituye a servicios de emergencia, protección civil, bomberos, policía, asistencia médica, autoridades locales, organizaciones humanitarias especializadas ni canales oficiales de rescate o evacuación.",
+              "Si una persona se encuentra en peligro inmediato, debe contactar primero con los servicios de emergencia, autoridades competentes u organizaciones humanitarias presentes en la zona.",
+            ]},
+            { t:"7. Tratamiento de datos personales", p:[
+              "Techo Venezuela tratará los datos personales proporcionados únicamente para gestionar solicitudes de ayuda, revisar ofertas de alojamiento, facilitar posibles conexiones, realizar seguimiento básico de los casos, prevenir abusos y proteger la seguridad de las personas participantes.",
+              "Los datos podrán incluir información identificativa, datos de contacto, ubicación aproximada, composición familiar, situación de vulnerabilidad y otra información necesaria para evaluar la solicitud u oferta.",
+              "Los datos no serán vendidos ni utilizados con fines comerciales.",
+              "La información solo será compartida con las personas estrictamente necesarias para evaluar y facilitar una posible conexión, o cuando exista obligación legal, riesgo grave para la seguridad de una persona o requerimiento de autoridad competente.",
+              "Las personas usuarias podrán solicitar acceso, rectificación, eliminación o limitación del tratamiento de sus datos escribiendo a: contacto@techovenezuela.org.",
+            ]},
+            { t:"8. Menores de edad", p:[
+              "Cuando una solicitud involucre a menores de edad, la información deberá ser proporcionada por su madre, padre, tutor legal o adulto responsable.",
+              "Techo Venezuela no publicará datos identificativos de menores ni compartirá información sensible sobre ellos salvo cuando sea necesario para evaluar una conexión segura y siempre bajo criterios de protección y mínima exposición.",
+            ]},
+            { t:"9. Veracidad de la información", p:[
+              "Al utilizar Techo Venezuela, cada persona declara que la información proporcionada es verdadera y que entiende que facilitar datos falsos, incompletos o engañosos puede implicar la suspensión de la solicitud u oferta y, si corresponde, la comunicación a las autoridades competentes.",
+            ]},
+            { t:"10. Cambios en este aviso", p:[
+              "Techo Venezuela podrá modificar este Aviso Legal cuando sea necesario para mejorar la seguridad del proyecto, adaptarse a cambios operativos o cumplir con obligaciones legales.",
+              "La versión actualizada estará disponible en esta página.",
+            ]},
+            { t:"11. Contacto", p:[
+              "Para consultas, solicitudes sobre datos personales, reporte de incidentes o dudas sobre este aviso, puedes escribir a contacto@techovenezuela.org",
+            ]},
+          ].map(({ t, p }) => (
+            <div key={t} style={{ marginBottom:32 }}>
+              <h2 style={{ fontSize:18, fontWeight:800, color:P.purple, marginBottom:12 }}>{t}</h2>
+              {p.map((para,i) => (
+                <p key={i} style={{ fontSize:14, lineHeight:1.8, color:"#4A3560", marginBottom:10 }}>{para}</p>
+              ))}
+            </div>
+          ))}
+
+          <div style={{ textAlign:"center", marginTop:48 }}>
+            <button className="btn-primary" onClick={() => setView("home")}>Volver al inicio</button>
+          </div>
+        </div>
+      )}
       {view === "listings" && (
         <div style={{ maxWidth:1080, margin:"0 auto", padding:"48px 24px" }}>
           <h2 style={{ fontSize:30, fontWeight:900, color:P.purple, marginBottom:6, letterSpacing:"-0.5px" }}>Espacios disponibles</h2>
@@ -545,6 +663,22 @@ export default function TechoVenezuela() {
                 </div>
               </div>
               <div style={{ background:P.greenBg, borderRadius:10, padding:"14px 16px", fontSize:13, color:"#1A7A4A", lineHeight:1.65 }}>✅ Tu publicación se revisará antes de aparecer. Te avisamos en máximo 2 horas.</div>
+
+              {/* Declaración de anfitrión */}
+              <div style={{ background:P.cardBg, border:`1.5px solid ${P.border}`, borderRadius:12, padding:"20px 22px" }}>
+                <h4 style={{ fontSize:13, fontWeight:800, color:P.purple, marginBottom:10, textTransform:"uppercase", letterSpacing:"0.04em" }}>Declaración de anfitrión/a</h4>
+                <p style={{ fontSize:13, color:"#4A3560", lineHeight:1.7, marginBottom:8 }}>Al ofrecer un espacio a través de Techo Venezuela, declaro que:</p>
+                <ul style={{ fontSize:13, color:"#4A3560", lineHeight:1.85, paddingLeft:18, marginBottom:8 }}>
+                  <li>El espacio ofrecido existe y está bajo mi control, autorización o responsabilidad.</li>
+                  <li>La información que proporciono sobre ubicación, capacidad, condiciones, disponibilidad, servicios básicos y normas de convivencia es verdadera.</li>
+                  <li>Me comprometo a tratar a la persona o familia acogida con respeto, dignidad y buena fe.</li>
+                  <li>Entiendo que no debo solicitar pagos, favores, servicios personales, contraprestaciones indebidas ni condiciones abusivas a cambio del alojamiento ofrecido.</li>
+                  <li>Acepto que Techo Venezuela pueda suspender o rechazar mi oferta si detecta información falsa, incompleta, riesgosa o contraria al espíritu solidario de la iniciativa.</li>
+                  <li>Entiendo que Techo Venezuela no será parte del acuerdo de alojamiento y que yo seré responsable de las condiciones del espacio que ofrezco.</li>
+                </ul>
+                <p style={{ fontSize:12, color:P.muted }}>Al hacer clic en "Publicar mi espacio" confirmas esta declaración y el <span onClick={() => setView("legal")} style={{ color:P.fuschia, fontWeight:700, cursor:"pointer", textDecoration:"underline" }}>Aviso Legal completo</span>.</p>
+              </div>
+
               <div style={{ display:"flex", gap:12 }}>
                 <button className="btn-outline" onClick={() => setStep(2)}>← Atrás</button>
                 <button className="btn-primary" style={{ flex:1 }} onClick={submitHostForm} disabled={submitting}>
@@ -601,6 +735,20 @@ export default function TechoVenezuela() {
               <div style={{ background:P.lilaBg, border:`1.5px solid ${P.purple}`, borderRadius:10, padding:"14px 16px", fontSize:13, color:P.purple, lineHeight:1.65 }}>
                 📞 Después de enviar, el anfitrión te contactará directamente. También puedes escribirle a: <strong>{selectedListing.phone}</strong>
               </div>
+
+              {/* Declaración antes de enviar */}
+              <div style={{ background:P.cardBg, border:`1.5px solid ${P.border}`, borderRadius:12, padding:"20px 22px" }}>
+                <h4 style={{ fontSize:13, fontWeight:800, color:P.purple, marginBottom:10, textTransform:"uppercase", letterSpacing:"0.04em" }}>Declaración antes de enviar</h4>
+                <ul style={{ fontSize:13, color:"#4A3560", lineHeight:1.85, paddingLeft:18, marginBottom:8 }}>
+                  <li>Declaro que la información proporcionada es verdadera y completa según mi conocimiento.</li>
+                  <li>Entiendo que Techo Venezuela es una iniciativa solidaria de conexión y no un proveedor de alojamiento, servicio de emergencia, autoridad pública, agencia inmobiliaria ni garante absoluto de seguridad.</li>
+                  <li>Entiendo que mi información será revisada por el equipo de Techo Venezuela para evaluar mi solicitud, facilitar posibles conexiones y realizar seguimiento básico del caso.</li>
+                  <li>Acepto que Techo Venezuela pueda contactarme por teléfono, WhatsApp o email para verificar información o coordinar una posible conexión.</li>
+                  <li>Entiendo que ninguna conexión está garantizada y que cualquier acuerdo final será responsabilidad de las personas directamente involucradas.</li>
+                </ul>
+                <p style={{ fontSize:12, color:P.muted }}>Al hacer clic en "Enviar solicitud" confirmas esta declaración y el <span onClick={() => setView("legal")} style={{ color:P.fuschia, fontWeight:700, cursor:"pointer", textDecoration:"underline" }}>Aviso Legal completo</span>.</p>
+              </div>
+
               <div style={{ display:"flex", gap:12 }}>
                 <button className="btn-outline" onClick={() => setStep(1)}>← Atrás</button>
                 <button className="btn-primary" style={{ flex:1 }} onClick={submitApplyForm} disabled={submitting}>
@@ -645,6 +793,8 @@ export default function TechoVenezuela() {
         <p style={{ fontSize:12, marginBottom:16 }}>contacto@techovenezuela.org · Reportar problema · Emergencias: 0800-TECHO-VE</p>
         <div style={{ display:"flex", gap:20, justifyContent:"center" }}>
           <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("nosotros")}>Quiénes somos</span>
+          <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("seguridad")}>Seguridad</span>
+          <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("legal")}>Aviso legal</span>
           <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("listings")}>Buscar techo</span>
           <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => { setView("offer"); setStep(1); }}>Ofrecer espacio</span>
         </div>
