@@ -137,10 +137,11 @@ export default function TechoVenezuela() {
             <Logo height={44} />
           </div>
           <div style={{ display:"flex", gap:28, alignItems:"center" }}>
-            <span className={`nav-lnk ${view==="listings"?"active":""}`} onClick={() => setView("listings")}>Buscar techo</span>
+            <span className={`nav-lnk ${view==="apply" && !selectedListing?"active":""}`} onClick={() => { setView("apply"); setStep(1); setSelectedListing(null); }}>Buscar techo</span>
             <span className={`nav-lnk ${view==="offer"?"active":""}`} onClick={() => { setView("offer"); setStep(1); }}>Ofrecer espacio</span>
+            <span className={`nav-lnk ${view==="listings"||view==="listing"?"active":""}`} onClick={() => setView("listings")}>Techos disponibles</span>
             <span className={`nav-lnk ${view==="nosotros"?"active":""}`} onClick={() => setView("nosotros")}>Quiénes somos</span>
-            <button className="btn-primary" style={{ padding:"9px 20px", fontSize:13 }} onClick={() => setView("listings")}>Necesito ayuda urgente</button>
+            <button className="btn-primary" style={{ padding:"9px 20px", fontSize:13 }} onClick={() => { setView("apply"); setStep(1); }}>Necesito ayuda urgente</button>
           </div>
         </div>
       </nav>
@@ -161,7 +162,7 @@ export default function TechoVenezuela() {
               Una red gratuita para venezolanos que ofrecen un techo y venezolanos que lo perdieron. Solo en Venezuela. Solo solidaridad.
             </p>
             <div style={{ display:"flex", gap:16, justifyContent:"center", flexWrap:"wrap" }}>
-              <button className="btn-primary" style={{ fontSize:16, padding:"15px 40px" }} onClick={() => setView("listings")}>Necesito un techo</button>
+              <button className="btn-primary" style={{ fontSize:16, padding:"15px 40px" }} onClick={() => { setView("apply"); setStep(1); }}>Necesito un techo</button>
               <button className="btn-ghost" style={{ fontSize:16, padding:"15px 40px" }} onClick={() => { setView("offer"); setStep(1); }}>Tengo espacio y quiero ayudar</button>
             </div>
           </div>
@@ -200,7 +201,7 @@ export default function TechoVenezuela() {
         <div style={{ background:P.white, padding:"60px 24px" }}>
           <div style={{ maxWidth:1080, margin:"0 auto" }}>
             <div style={{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:36 }}>
-              <h2 style={{ fontSize:28, fontWeight:900, color:P.purple, letterSpacing:"-0.5px" }}>Espacios disponibles ahora</h2>
+              <h2 style={{ fontSize:28, fontWeight:900, color:P.purple, letterSpacing:"-0.5px" }}>Techos disponibles ahora</h2>
               <span style={{ color:P.fuschia, fontWeight:700, cursor:"pointer", fontSize:14 }} onClick={() => setView("listings")}>Ver todos →</span>
             </div>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:24 }}>
@@ -511,8 +512,8 @@ export default function TechoVenezuela() {
       )}
       {view === "listings" && (
         <div style={{ maxWidth:1080, margin:"0 auto", padding:"48px 24px" }}>
-          <h2 style={{ fontSize:30, fontWeight:900, color:P.purple, marginBottom:6, letterSpacing:"-0.5px" }}>Espacios disponibles</h2>
-          <p style={{ color:P.muted, marginBottom:32, fontSize:15 }}>Venezolanos que abren su casa. Sin costo. Solo solidaridad.</p>
+          <h2 style={{ fontSize:30, fontWeight:900, color:P.purple, marginBottom:6, letterSpacing:"-0.5px" }}>Techos disponibles</h2>
+          <p style={{ color:P.muted, marginBottom:32, fontSize:15 }}>Espacios ya revisados y aprobados por nuestro equipo. Venezolanos que abren su casa.</p>
           <div style={{ marginBottom:36 }}>
             <span className="lbl">Filtrar por estado</span>
             <div style={{ display:"flex", flexWrap:"wrap", gap:8, marginTop:8 }}>
@@ -701,11 +702,15 @@ export default function TechoVenezuela() {
       )}
 
       {/* ══════ APPLY FORM ══════ */}
-      {view === "apply" && selectedListing && (
+      {view === "apply" && (
         <div style={{ maxWidth:600, margin:"0 auto", padding:"44px 24px" }}>
-          <button onClick={() => setView("listing")} style={{ background:"none", border:"none", color:P.fuschia, cursor:"pointer", fontWeight:700, fontSize:15, marginBottom:28 }}>← Volver</button>
-          <h2 style={{ fontSize:26, fontWeight:900, color:P.purple, marginBottom:6, letterSpacing:"-0.5px" }}>Solicitar este espacio</h2>
-          <p style={{ color:P.muted, marginBottom:28, fontSize:14 }}>Con <strong>{selectedListing.hostName}</strong> en {selectedListing.zone}</p>
+          <button onClick={() => setView(selectedListing ? "listing" : "home")} style={{ background:"none", border:"none", color:P.fuschia, cursor:"pointer", fontWeight:700, fontSize:15, marginBottom:28 }}>← Volver</button>
+          <h2 style={{ fontSize:26, fontWeight:900, color:P.purple, marginBottom:6, letterSpacing:"-0.5px" }}>{selectedListing ? "Solicitar este espacio" : "Necesito un techo"}</h2>
+          <p style={{ color:P.muted, marginBottom:28, fontSize:14 }}>
+            {selectedListing
+              ? <>Con <strong>{selectedListing.hostName}</strong> en {selectedListing.zone}</>
+              : "Cuéntanos tu caso. Nuestro equipo lo revisará y buscará el anfitrión más adecuado para ti."}
+          </p>
           <div className="sbar"><div className="sfil" style={{ width:`${(step/4)*100}%` }} /></div>
           <p style={{ fontSize:12, color:P.muted, marginBottom:32, marginTop:6 }}>Paso {step} de 4</p>
 
@@ -821,9 +826,16 @@ export default function TechoVenezuela() {
                 <input placeholder="Teléfono o email" value={applyForm.referenceContact} onChange={e => setApplyForm(p=>({...p,referenceContact:e.target.value}))} />
               </div>
 
-              <div style={{ background:P.lilaBg, border:`1.5px solid ${P.purple}`, borderRadius:10, padding:"14px 16px", fontSize:13, color:P.purple, lineHeight:1.65 }}>
-                📞 Después de enviar, el anfitrión te contactará directamente. También puedes escribirle a: <strong>{selectedListing.phone}</strong>
-              </div>
+              {selectedListing && (
+                <div style={{ background:P.lilaBg, border:`1.5px solid ${P.purple}`, borderRadius:10, padding:"14px 16px", fontSize:13, color:P.purple, lineHeight:1.65 }}>
+                  📞 Después de enviar, el anfitrión te contactará directamente. También puedes escribirle a: <strong>{selectedListing.phone}</strong>
+                </div>
+              )}
+              {!selectedListing && (
+                <div style={{ background:P.lilaBg, border:`1.5px solid ${P.purple}`, borderRadius:10, padding:"14px 16px", fontSize:13, color:P.purple, lineHeight:1.65 }}>
+                  📋 Nuestro equipo revisará tu caso y buscará el anfitrión más adecuado según tu situación, zona y necesidades. Te contactaremos en menos de 24 horas.
+                </div>
+              )}
 
               {/* Declaración antes de enviar */}
               <div style={{ background:P.cardBg, border:`1.5px solid ${P.border}`, borderRadius:12, padding:"20px 22px" }}>
@@ -864,9 +876,13 @@ export default function TechoVenezuela() {
         <div style={{ maxWidth:520, margin:"0 auto", padding:"100px 24px", textAlign:"center" }}>
           <div style={{ width:80, height:80, borderRadius:"50%", background:P.lilaBg, display:"flex", alignItems:"center", justifyContent:"center", fontSize:40, margin:"0 auto 28px" }}>🤝</div>
           <h2 style={{ fontSize:28, fontWeight:900, color:P.purple, marginBottom:14, letterSpacing:"-0.5px" }}>Solicitud enviada</h2>
-          <p style={{ color:"#4A3560", fontSize:15, lineHeight:1.75, marginBottom:40 }}>El anfitrión recibirá tu solicitud y te contactará por teléfono. Si no hay respuesta en 24 horas, puedes llamarle directamente desde el perfil.</p>
+          <p style={{ color:"#4A3560", fontSize:15, lineHeight:1.75, marginBottom:40 }}>
+            {selectedListing
+              ? "El anfitrión recibirá tu solicitud y te contactará por teléfono. Si no hay respuesta en 24 horas, puedes llamarle directamente desde el perfil."
+              : "Nuestro equipo revisará tu caso y buscará el anfitrión más adecuado según tu situación. Te contactaremos por teléfono en menos de 24 horas."}
+          </p>
           <div style={{ display:"flex", gap:12, justifyContent:"center" }}>
-            <button className="btn-primary" onClick={() => setView("listings")}>Ver más espacios</button>
+            <button className="btn-primary" onClick={() => setView("listings")}>Ver techos disponibles</button>
             <button className="btn-outline" onClick={() => setView("home")}>Inicio</button>
           </div>
         </div>
@@ -880,12 +896,13 @@ export default function TechoVenezuela() {
         </div>
         <p style={{ fontSize:13, marginBottom:8 }}>Red ciudadana de solidaridad. Gratuito. Sin fines de lucro. Solo venezolanos en Venezuela.</p>
         <p style={{ fontSize:12, marginBottom:16 }}>contacto@techovenezuela.org · Reportar problema · Emergencias: 0800-TECHO-VE</p>
-        <div style={{ display:"flex", gap:20, justifyContent:"center" }}>
+        <div style={{ display:"flex", gap:20, justifyContent:"center", flexWrap:"wrap" }}>
+          <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => { setView("apply"); setStep(1); setSelectedListing(null); }}>Buscar techo</span>
+          <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => { setView("offer"); setStep(1); }}>Ofrecer espacio</span>
+          <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("listings")}>Techos disponibles</span>
           <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("nosotros")}>Quiénes somos</span>
           <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("seguridad")}>Seguridad</span>
           <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("legal")}>Aviso legal</span>
-          <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => setView("listings")}>Buscar techo</span>
-          <span style={{ cursor:"pointer", fontSize:13 }} onClick={() => { setView("offer"); setStep(1); }}>Ofrecer espacio</span>
         </div>
       </footer>
     </div>
