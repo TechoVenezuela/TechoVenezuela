@@ -17,7 +17,7 @@ const P = {
 };
 
 // ── LOGO SVG COMPONENT ──────────────────────────────────
-function Logo({ height = 60, light = false }) {
+function Logo({ height = 36, light = false }) {
   const textColor = light ? "#fff" : P.text;
   const subColor = light ? P.yellow : P.purple;
   const arc1Color = light ? "rgba(255,255,255,0.45)" : P.purple;
@@ -142,7 +142,7 @@ export default function TechoVenezuela() {
           <div style={{ position:"absolute", bottom:-60, left:-60, width:280, height:280, borderRadius:"50%", background:"rgba(214,51,132,0.10)" }} />
           <div style={{ maxWidth:680, margin:"0 auto", position:"relative", zIndex:1 }}>
             <div style={{ display:"flex", justifyContent:"center", marginBottom:32 }}>
-              <Logo height={60} light={true} />
+              <Logo height={48} light={true} />
             </div>
             <h1 style={{ fontFamily:"Inter,sans-serif", fontSize:52, fontWeight:900, color:"#fff", lineHeight:1.1, marginBottom:24, letterSpacing:"-1px" }}>
               Si tienes espacio,<br /><span style={{ color:P.yellow }}>alguien lo necesita hoy.</span>
@@ -232,93 +232,143 @@ export default function TechoVenezuela() {
         <div>
           {/* Hero */}
           <div style={{ background:`linear-gradient(135deg,${P.purple},${P.purpleDk})`, padding:"72px 24px", textAlign:"center" }}>
-            <div style={{ maxWidth:680, margin:"0 auto" }}>
+            <div style={{ maxWidth:700, margin:"0 auto" }}>
               <div style={{ display:"inline-flex", alignItems:"center", gap:8, background:"rgba(245,200,66,0.15)", border:"1px solid rgba(245,200,66,0.4)", borderRadius:24, padding:"6px 18px", marginBottom:24 }}>
                 <span style={{ color:P.yellow, fontSize:12, fontWeight:700, textTransform:"uppercase", letterSpacing:"0.08em" }}>Sin fines de lucro · 100% gratuito</span>
               </div>
               <h1 style={{ fontSize:44, fontWeight:900, color:"#fff", lineHeight:1.1, marginBottom:20, letterSpacing:"-1px" }}>
-                Nacimos del terremoto.<br /><span style={{ color:P.yellow }}>Para que nadie duerma en la calle.</span>
+                Somos un puente.<br /><span style={{ color:P.yellow }}>Entre la urgencia y la organización.</span>
               </h1>
               <p style={{ color:"rgba(255,255,255,0.75)", fontSize:17, lineHeight:1.75 }}>
                 Techo Venezuela es una iniciativa ciudadana creada el 24 de junio de 2026, el mismo día que los terremotos sacudieron el norte del país.
               </p>
+              {/* Sub-nav */}
+              <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap", marginTop:36 }}>
+                {[["quienes","Quiénes somos"],["porque","Por qué existimos"],["seguridad","Cómo cuidamos la seguridad"]].map(([id,label]) => (
+                  <a key={id} href={`#${id}`} style={{ background:"rgba(255,255,255,0.15)", color:"#fff", padding:"8px 18px", borderRadius:20, fontSize:13, fontWeight:600, textDecoration:"none", border:"1px solid rgba(255,255,255,0.3)" }}>{label}</a>
+                ))}
+              </div>
             </div>
           </div>
 
           <div style={{ maxWidth:800, margin:"0 auto", padding:"64px 24px" }}>
 
-            {/* Quiénes somos */}
-            <div style={{ marginBottom:56 }}>
-              <h2 style={{ fontSize:28, fontWeight:900, color:P.purple, marginBottom:20, letterSpacing:"-0.5px" }}>Quiénes somos</h2>
-              <p style={{ fontSize:16, lineHeight:1.85, color:"#4A3560", marginBottom:16 }}>
-                Somos un equipo de profesionales venezolanos con más de 8 años de experiencia en reubicación, movilidad humana y servicios de destino. Hemos acompañado a cientos de familias en procesos de mudanza, integración y adaptación a nuevos entornos — tanto dentro de Venezuela como en el exterior.
+            {/* ── QUIÉNES SOMOS ── */}
+            <div id="quienes" style={{ marginBottom:72 }}>
+              <div style={{ display:"inline-block", background:P.lilaBg, color:P.purple, fontSize:11, fontWeight:700, padding:"4px 12px", borderRadius:20, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:16 }}>Quiénes somos</div>
+              <h2 style={{ fontSize:32, fontWeight:900, color:P.purple, marginBottom:28, letterSpacing:"-0.5px", lineHeight:1.2 }}>Una red independiente de apoyo. No una institución.</h2>
+
+              <p style={{ fontSize:17, lineHeight:1.9, color:"#4A3560", marginBottom:20 }}>
+                Techo Venezuela nació como una respuesta ciudadana ante una emergencia: familias que perdieron su casa o no pueden volver a ella, y personas dispuestas a abrir una puerta.
               </p>
-              <p style={{ fontSize:16, lineHeight:1.85, color:"#4A3560" }}>
-                Cuando ocurrieron los terremotos del 24 de junio, supimos exactamente qué hacer: conectar a quien tiene espacio con quien lo perdió, de forma organizada, verificada y segura. Por eso creamos Techo Venezuela en menos de 24 horas.
+              <p style={{ fontSize:17, lineHeight:1.9, color:"#4A3560", marginBottom:20 }}>
+                Somos una red independiente de apoyo creada para conectar, de forma gratuita, a personas afectadas por la emergencia en Venezuela con anfitriones que puedan ofrecer un espacio temporal seguro: una habitación, una casa vacía, un anexo, un sofá cama o cualquier lugar digno donde alguien pueda dormir bajo techo mientras encuentra su próximo paso.
+              </p>
+              <p style={{ fontSize:17, lineHeight:1.9, color:"#4A3560", marginBottom:32 }}>
+                No somos una agencia inmobiliaria, una plataforma comercial ni una institución del Estado. No cobramos por conectar a las personas. No intermediamos pagos. No sustituimos a organismos de emergencia, protección civil, organizaciones humanitarias o servicios médicos.
+              </p>
+
+              {/* Somos un puente */}
+              <div style={{ background:`linear-gradient(135deg,${P.purple},${P.purpleDk})`, borderRadius:20, padding:"40px 36px", marginBottom:40, textAlign:"center" }}>
+                <p style={{ fontSize:22, fontWeight:900, color:"#fff", lineHeight:1.6, marginBottom:0 }}>
+                  Somos un puente.<br />
+                  <span style={{ color:P.yellow }}>Un puente entre quien necesita ayuda y quien puede ofrecerla.</span><br />
+                  <span style={{ color:"rgba(255,255,255,0.75)", fontWeight:600, fontSize:18 }}>Un puente entre la urgencia y la organización.</span><br />
+                  <span style={{ color:"rgba(255,255,255,0.75)", fontWeight:600, fontSize:18 }}>Un puente entre la solidaridad y la seguridad.</span>
+                </p>
+              </div>
+
+              <p style={{ fontSize:16, lineHeight:1.85, color:"#4A3560", fontStyle:"italic", borderLeft:`4px solid ${P.yellow}`, paddingLeft:20 }}>
+                Porque en momentos así, ayudar no puede depender solo de la buena intención. También necesita orden, cuidado y responsabilidad.
               </p>
             </div>
 
-            {/* Por qué confiar */}
-            <div style={{ background:P.lilaBg, borderRadius:20, padding:"40px 36px", marginBottom:56 }}>
-              <h2 style={{ fontSize:24, fontWeight:900, color:P.purple, marginBottom:28, letterSpacing:"-0.5px" }}>Por qué puedes confiar en nosotros</h2>
-              <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))", gap:24 }}>
+            {/* ── POR QUÉ EXISTE ── */}
+            <div id="porque" style={{ marginBottom:72 }}>
+              <div style={{ display:"inline-block", background:P.lilaBg, color:P.purple, fontSize:11, fontWeight:700, padding:"4px 12px", borderRadius:20, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:16 }}>Por qué existimos</div>
+              <h2 style={{ fontSize:32, fontWeight:900, color:P.purple, marginBottom:12, letterSpacing:"-0.5px", lineHeight:1.2 }}>Por qué existe Techo Venezuela</h2>
+
+              <div style={{ background:P.cardBg, borderRadius:16, padding:"28px 32px", marginBottom:32, border:`1.5px solid ${P.border}` }}>
+                <p style={{ fontSize:20, fontWeight:800, color:P.purple, lineHeight:1.5, marginBottom:8 }}>Después de una emergencia, una de las primeras preguntas es brutalmente simple:</p>
+                <p style={{ fontSize:24, fontWeight:900, color:P.fuschia, letterSpacing:"-0.5px" }}>¿Dónde duermo esta noche?</p>
+              </div>
+
+              <p style={{ fontSize:16, lineHeight:1.9, color:"#4A3560", marginBottom:20 }}>
+                Para muchas familias, volver a casa no es posible. Para otras, la casa sigue en pie, pero no se siente segura. Hay personas mayores, niños, mujeres solas, familias separadas, personas con discapacidad, mascotas, documentos perdidos, teléfonos sin batería y decisiones urgentes que tomar con muy poca información.
+              </p>
+              <p style={{ fontSize:16, lineHeight:1.9, color:"#4A3560", marginBottom:20 }}>
+                Techo Venezuela existe para responder a una necesidad concreta: encontrar espacios temporales y seguros para personas que han quedado sin techo o que necesitan salir de una zona de riesgo.
+              </p>
+              <p style={{ fontSize:16, lineHeight:1.9, color:"#4A3560", marginBottom:32, fontWeight:600 }}>
+                La solidaridad venezolana siempre aparece. Eso no está en duda. Lo que falta muchas veces es una forma ordenada de conectar esa ayuda con quienes más la necesitan, sin exponer a las familias afectadas ni a quienes ofrecen su casa.
+              </p>
+
+              <p style={{ fontSize:16, fontWeight:700, color:P.purple, marginBottom:16 }}>Por eso creamos esta plataforma:</p>
+              <div style={{ display:"flex", flexDirection:"column", gap:12, marginBottom:36 }}>
                 {[
-                  { icon:"📋", title:"8+ años de experiencia", desc:"Hemos gestionado cientos de reubicaciones. Conocemos los procesos, los riesgos y cómo proteger a las personas." },
-                  { icon:"⚖️", title:"Conocemos las legalidades", desc:"Entendemos los derechos de anfitriones y huéspedes. Nuestro proceso está diseñado para proteger a ambas partes." },
-                  { icon:"🔍", title:"Verificación rigurosa", desc:"Revisamos cada publicación antes de aprobarla. No publicamos espacios sin pasar por nuestro proceso de validación." },
-                  { icon:"❤️", title:"Sin fines de lucro", desc:"No cobramos comisiones ni tarifas. Nunca. Este proyecto existe solo para ayudar." },
-                ].map(({ icon, title, desc }) => (
-                  <div key={title} style={{ background:P.white, borderRadius:14, padding:"24px 20px" }}>
-                    <div style={{ fontSize:28, marginBottom:12 }}>{icon}</div>
-                    <h3 style={{ fontSize:15, fontWeight:800, color:P.purple, marginBottom:8 }}>{title}</h3>
-                    <p style={{ fontSize:13, color:P.muted, lineHeight:1.65 }}>{desc}</p>
+                  "Para que quien pueda ofrecer un espacio pueda registrarlo.",
+                  "Para que quien necesita alojamiento pueda pedir ayuda.",
+                  "Para que cada caso sea revisado por una persona.",
+                  "Para que las conexiones no se hagan a ciegas.",
+                  "Para que la ayuda llegue con más rapidez, pero también con más cuidado.",
+                ].map((item,i) => (
+                  <div key={i} style={{ display:"flex", gap:14, alignItems:"flex-start", background:P.cardBg, borderRadius:12, padding:"14px 18px", border:`1.5px solid ${P.border}` }}>
+                    <span style={{ background:P.yellow, color:P.purple, width:24, height:24, borderRadius:"50%", display:"flex", alignItems:"center", justifyContent:"center", fontSize:12, fontWeight:900, flexShrink:0, marginTop:1 }}>{i+1}</span>
+                    <p style={{ fontSize:15, color:"#4A3560", lineHeight:1.6 }}>{item}</p>
                   </div>
                 ))}
               </div>
-            </div>
 
-            {/* Cómo verificamos */}
-            <div style={{ marginBottom:56 }}>
-              <h2 style={{ fontSize:28, fontWeight:900, color:P.purple, marginBottom:8, letterSpacing:"-0.5px" }}>Cómo verificamos anfitriones y huéspedes</h2>
-              <p style={{ color:P.muted, fontSize:15, marginBottom:32 }}>Un proceso de dos vías — protegemos a ambas partes.</p>
-
-              <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:20 }}>
-                <div style={{ background:P.cardBg, borderRadius:16, padding:"28px 24px", border:`1.5px solid ${P.border}` }}>
-                  <h3 style={{ fontSize:17, fontWeight:800, color:P.purple, marginBottom:16 }}>Para anfitriones 🏠</h3>
-                  {["Revisamos manualmente cada publicación antes de aprobarla","Verificamos que la información sea coherente y completa","Validamos el número de teléfono con una llamada de confirmación","Rechazamos publicaciones que no cumplan con condiciones mínimas de seguridad","Monitoreamos reportes de la comunidad"].map((item,i) => (
-                    <div key={i} style={{ display:"flex", gap:10, marginBottom:10, fontSize:14, color:"#4A3560", alignItems:"flex-start" }}>
-                      <span style={{ color:P.green, fontWeight:700, marginTop:1 }}>✓</span>{item}
-                    </div>
-                  ))}
-                </div>
-                <div style={{ background:P.cardBg, borderRadius:16, padding:"28px 24px", border:`1.5px solid ${P.border}` }}>
-                  <h3 style={{ fontSize:17, fontWeight:800, color:P.purple, marginBottom:16 }}>Para huéspedes 👥</h3>
-                  {["Solicitamos cédula venezolana vigente como identificación base","Pedimos información sobre el grupo — adultos, niños, necesidades especiales","Requerimos una descripción honesta de la situación","Solicitamos referencias de al menos una persona","El anfitrión tiene la decisión final de aceptar o no"].map((item,i) => (
-                    <div key={i} style={{ display:"flex", gap:10, marginBottom:10, fontSize:14, color:"#4A3560", alignItems:"flex-start" }}>
-                      <span style={{ color:P.green, fontWeight:700, marginTop:1 }}>✓</span>{item}
-                    </div>
-                  ))}
-                </div>
+              <div style={{ background:P.lilaBg, borderRadius:16, padding:"28px 32px", textAlign:"center" }}>
+                <p style={{ fontSize:16, color:"#4A3560", lineHeight:1.8, marginBottom:12 }}>Techo Venezuela no promete resolverlo todo.</p>
+                <p style={{ fontSize:18, fontWeight:800, color:P.purple, lineHeight:1.6 }}>
+                  Promete hacer algo concreto, humano y urgente:<br />
+                  <span style={{ color:P.fuschia }}>ayudar a que más personas tengan un techo seguro mientras reconstruyen el resto.</span>
+                </p>
               </div>
             </div>
 
-            {/* Sin fines de lucro */}
-            <div style={{ background:`linear-gradient(135deg,${P.purple},${P.purpleDk})`, borderRadius:20, padding:"40px 36px", textAlign:"center", marginBottom:56 }}>
-              <div style={{ fontSize:40, marginBottom:16 }}>❤️</div>
-              <h2 style={{ fontSize:24, fontWeight:900, color:"#fff", marginBottom:14, letterSpacing:"-0.5px" }}>100% gratuito. Sin excepción.</h2>
-              <p style={{ color:"rgba(255,255,255,0.78)", fontSize:16, lineHeight:1.75, maxWidth:480, margin:"0 auto 24px" }}>
-                Techo Venezuela no cobra nada a anfitriones ni a huéspedes. No recibimos publicidad. No vendemos datos. Este proyecto existe porque creemos que nadie debería dormir en la calle mientras haya venezolanos con espacio en su casa.
+            {/* ── SEGURIDAD / VETTING ── */}
+            <div id="seguridad" style={{ marginBottom:56 }}>
+              <div style={{ display:"inline-block", background:P.lilaBg, color:P.purple, fontSize:11, fontWeight:700, padding:"4px 12px", borderRadius:20, textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:16 }}>Seguridad</div>
+              <h2 style={{ fontSize:32, fontWeight:900, color:P.purple, marginBottom:12, letterSpacing:"-0.5px", lineHeight:1.2 }}>Cómo cuidamos la seguridad</h2>
+              <p style={{ fontSize:16, lineHeight:1.85, color:"#4A3560", marginBottom:16 }}>
+                Techo Venezuela no funciona como un sistema automático. Cada solicitud y cada oferta de alojamiento pasa por una revisión humana antes de ser conectada.
               </p>
-              <div style={{ display:"flex", gap:12, justifyContent:"center", flexWrap:"wrap" }}>
-                <span style={{ background:"rgba(245,200,66,0.2)", color:P.yellow, padding:"6px 16px", borderRadius:20, fontSize:13, fontWeight:600 }}>$0 para anfitriones</span>
-                <span style={{ background:"rgba(245,200,66,0.2)", color:P.yellow, padding:"6px 16px", borderRadius:20, fontSize:13, fontWeight:600 }}>$0 para huéspedes</span>
-                <span style={{ background:"rgba(245,200,66,0.2)", color:P.yellow, padding:"6px 16px", borderRadius:20, fontSize:13, fontWeight:600 }}>Sin comisiones</span>
-                <span style={{ background:"rgba(245,200,66,0.2)", color:P.yellow, padding:"6px 16px", borderRadius:20, fontSize:13, fontWeight:600 }}>Sin publicidad</span>
+              <p style={{ fontSize:16, lineHeight:1.85, color:"#4A3560", marginBottom:40 }}>
+                Sabemos que abrir una casa requiere confianza. También sabemos que pedir refugio en un momento vulnerable requiere protección. Por eso nuestro proceso está diseñado para reducir riesgos para ambas partes.
+              </p>
+
+              <div style={{ display:"flex", flexDirection:"column", gap:16, marginBottom:40 }}>
+                {[
+                  { n:"1", title:"Registro separado", desc:"Las personas que ofrecen alojamiento y las personas que necesitan alojamiento completan formularios distintos. Esto nos permite entender la situación de cada lado antes de hacer cualquier conexión." },
+                  { n:"2", title:"Verificación básica de identidad", desc:"Solicitamos datos de contacto, documento de identidad cuando sea posible, teléfono verificable y, en algunos casos, una videollamada corta o confirmación por referencia." },
+                  { n:"3", title:"Revisión del espacio ofrecido", desc:"Pedimos información sobre la ubicación aproximada, tipo de espacio, capacidad, condiciones básicas, acceso a baño, agua, electricidad cuando exista, privacidad, presencia de mascotas, niños u otras personas en la vivienda." },
+                  { n:"4", title:"Confirmación de seguridad mínima", desc:"No publicamos direcciones exactas de forma abierta. La dirección completa solo se comparte cuando hay una posible coincidencia y ambas partes han sido contactadas." },
+                  { n:"5", title:"Priorización de casos vulnerables", desc:"Cuando hay muchas solicitudes, priorizamos familias con niños, personas mayores, personas con discapacidad, mujeres solas, personas con necesidades médicas y casos donde la vivienda ya no es habitable." },
+                  { n:"6", title:"Match humano", desc:"No asignamos personas automáticamente. Revisamos compatibilidad básica: zona, número de personas, duración estimada, necesidades especiales, disponibilidad del espacio y condiciones del anfitrión." },
+                  { n:"7", title:"Acuerdo claro entre las partes", desc:"Antes de confirmar, ambas partes reciben por escrito las condiciones básicas: duración prevista, número de personas, normas de convivencia, qué se ofrece y qué no se ofrece." },
+                  { n:"8", title:"Seguimiento", desc:"Después del contacto inicial, intentamos hacer seguimiento para confirmar que la conexión ocurrió y que no se reportaron problemas." },
+                ].map(({ n, title, desc }) => (
+                  <div key={n} style={{ display:"flex", gap:20, background:P.cardBg, borderRadius:14, padding:"22px 24px", border:`1.5px solid ${P.border}`, alignItems:"flex-start" }}>
+                    <div style={{ background:P.purple, color:"#fff", width:36, height:36, borderRadius:10, display:"flex", alignItems:"center", justifyContent:"center", fontSize:14, fontWeight:900, flexShrink:0 }}>{n}</div>
+                    <div>
+                      <h3 style={{ fontSize:15, fontWeight:800, color:P.purple, marginBottom:6 }}>{title}</h3>
+                      <p style={{ fontSize:14, color:"#4A3560", lineHeight:1.7 }}>{desc}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ background:"#FFF9EC", border:`1.5px solid ${P.yellow}`, borderRadius:16, padding:"28px 32px" }}>
+                <p style={{ fontSize:15, color:"#5A4A00", lineHeight:1.8 }}>
+                  <strong>Este proceso no elimina todos los riesgos.</strong> Ningún proceso puede hacerlo. Pero sí crea una capa de revisión, cuidado y responsabilidad para que la ayuda no dependa solo de mensajes reenviados por WhatsApp o publicaciones sueltas en redes sociales.
+                </p>
               </div>
             </div>
 
             {/* Contacto */}
-            <div style={{ textAlign:"center" }}>
+            <div style={{ textAlign:"center", paddingTop:20 }}>
               <h2 style={{ fontSize:24, fontWeight:900, color:P.purple, marginBottom:12, letterSpacing:"-0.5px" }}>¿Tienes preguntas o quieres colaborar?</h2>
               <p style={{ color:P.muted, fontSize:15, marginBottom:24 }}>Escríbenos directamente. Respondemos en menos de 24 horas.</p>
               <a href="mailto:contacto@techovenezuela.org" style={{ display:"inline-block", background:P.yellow, color:P.purple, padding:"14px 32px", borderRadius:10, fontWeight:800, fontSize:15, textDecoration:"none" }}>
