@@ -47,7 +47,17 @@ export default function TechoVenezuela() {
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
   const [hostForm, setHostForm] = useState({ name:"", phone:"", estado:"", zone:"", roomType:"", maxGuests:1, maxDuration:"", story:"", offers:[], accepts:[], vetProcess:"", hasElectricity:false, hasWater:false, hasGas:false });
-  const [applyForm, setApplyForm] = useState({ name:"", cedula:"", phone:"", adults:1, children:0, situation:"", fromEstado:"", needDuration:"", hasElderlyOrDisabled:false });
+  const [applyForm, setApplyForm] = useState({
+    name:"", cedula:"", phone:"", adults:1, children:0, situation:"", fromEstado:"", needDuration:"", hasElderlyOrDisabled:false,
+    // Condición de la vivienda
+    homeCondition:"", homeDamage:"",
+    // Verificación
+    hasCriminalRecord:"", criminalRecordExplain:"", canVideoCall:"",
+    // Preferencias
+    preferredZone:"", preferredZoneReason:"",
+    // Referencia
+    referenceName:"", referenceContact:"",
+  });
 
   const offerOptions = ["Cama con colchón","Colchones en el piso","Ropa de cama","Agua (cisterna/pozo)","Cocina de gas","Nevera","Planta eléctrica","Baño privado","Baño compartido","Comida básica incluida","Acceso a patio"];
   const acceptOptions = ["Familias con niños","Madres solas","Adultos mayores","Personas con discapacidad","Adultos solos","Parejas","Mascotas pequeñas","Personas enfermas"];
@@ -696,8 +706,9 @@ export default function TechoVenezuela() {
           <button onClick={() => setView("listing")} style={{ background:"none", border:"none", color:P.fuschia, cursor:"pointer", fontWeight:700, fontSize:15, marginBottom:28 }}>← Volver</button>
           <h2 style={{ fontSize:26, fontWeight:900, color:P.purple, marginBottom:6, letterSpacing:"-0.5px" }}>Solicitar este espacio</h2>
           <p style={{ color:P.muted, marginBottom:28, fontSize:14 }}>Con <strong>{selectedListing.hostName}</strong> en {selectedListing.zone}</p>
-          <div className="sbar"><div className="sfil" style={{ width:`${(step/2)*100}%` }} /></div>
-          <p style={{ fontSize:12, color:P.muted, marginBottom:32, marginTop:6 }}>Paso {step} de 2</p>
+          <div className="sbar"><div className="sfil" style={{ width:`${(step/4)*100}%` }} /></div>
+          <p style={{ fontSize:12, color:P.muted, marginBottom:32, marginTop:6 }}>Paso {step} de 4</p>
+
           {step === 1 && (
             <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
               <h3 style={{ fontSize:20, fontWeight:800, color:P.purple }}>Quién eres y de dónde vienes</h3>
@@ -722,16 +733,94 @@ export default function TechoVenezuela() {
               <button className="btn-primary" onClick={() => setStep(2)}>Siguiente →</button>
             </div>
           )}
+
           {step === 2 && (
             <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
-              <h3 style={{ fontSize:20, fontWeight:800, color:P.purple }}>Tu situación</h3>
+              <h3 style={{ fontSize:20, fontWeight:800, color:P.purple }}>Tu situación y tu vivienda actual</h3>
               <div><span className="lbl">¿Qué pasó? Cuéntale al anfitrión</span><textarea rows={4} placeholder="ej. Mi edificio colapsó en La Guaira. Somos 3 personas. Perdimos todo y no tenemos familia en Caracas." value={applyForm.situation} onChange={e => setApplyForm(p=>({...p,situation:e.target.value}))} /></div>
+
+              <div><span className="lbl">¿En qué condición está tu vivienda actual?</span>
+                <select value={applyForm.homeCondition} onChange={e => setApplyForm(p=>({...p,homeCondition:e.target.value}))}>
+                  <option value="">Selecciona</option>
+                  <option>Colapsó completamente — no es habitable</option>
+                  <option>Daños graves — no es segura para vivir</option>
+                  <option>Daños moderados — necesita reparación antes de volver</option>
+                  <option>Sin daños visibles, pero no me siento segura/o regresando</option>
+                  <option>No tengo acceso actualmente a mi vivienda</option>
+                </select>
+              </div>
+
+              <div><span className="lbl">Describe brevemente los daños (si aplica)</span>
+                <textarea rows={3} placeholder="ej. Grietas estructurales en paredes principales, techo parcialmente colapsado, sin agua ni electricidad desde el terremoto." value={applyForm.homeDamage} onChange={e => setApplyForm(p=>({...p,homeDamage:e.target.value}))} />
+              </div>
+
               <div><span className="lbl">¿Cuánto tiempo necesitas?</span>
                 <select value={applyForm.needDuration} onChange={e => setApplyForm(p=>({...p,needDuration:e.target.value}))}>
                   <option value="">Selecciona</option><option>1 semana</option><option>2 semanas</option>
                   <option>1 mes</option><option>2 meses</option><option>3 meses o más</option>
                 </select>
               </div>
+
+              <div style={{ display:"flex", gap:12 }}>
+                <button className="btn-outline" onClick={() => setStep(1)}>← Atrás</button>
+                <button className="btn-primary" style={{ flex:1 }} onClick={() => setStep(3)}>Siguiente →</button>
+              </div>
+            </div>
+          )}
+
+          {step === 3 && (
+            <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
+              <h3 style={{ fontSize:20, fontWeight:800, color:P.purple }}>Verificación y preferencias</h3>
+
+              <div><span className="lbl">¿Tienes antecedentes penales?</span>
+                <select value={applyForm.hasCriminalRecord} onChange={e => setApplyForm(p=>({...p,hasCriminalRecord:e.target.value}))}>
+                  <option value="">Selecciona</option>
+                  <option>No</option>
+                  <option>Sí</option>
+                  <option>Prefiero explicarlo directamente</option>
+                </select>
+              </div>
+              {applyForm.hasCriminalRecord && applyForm.hasCriminalRecord !== "No" && (
+                <div><span className="lbl">Explica brevemente (opcional pero recomendado)</span>
+                  <textarea rows={2} placeholder="Esto nos ayuda a evaluar tu caso con contexto completo." value={applyForm.criminalRecordExplain} onChange={e => setApplyForm(p=>({...p,criminalRecordExplain:e.target.value}))} />
+                </div>
+              )}
+
+              <div><span className="lbl">¿Estás disponible para una videollamada corta de verificación?</span>
+                <select value={applyForm.canVideoCall} onChange={e => setApplyForm(p=>({...p,canVideoCall:e.target.value}))}>
+                  <option value="">Selecciona</option>
+                  <option>Sí, cuando sea necesario</option>
+                  <option>Sí, pero con tiempo limitado</option>
+                  <option>No tengo acceso a videollamada actualmente</option>
+                </select>
+              </div>
+              <p style={{ fontSize:12, color:P.muted, marginTop:-10 }}>Esto es opcional — no es requisito obligatorio para aplicar, pero ayuda a agilizar tu solicitud.</p>
+
+              <div><span className="lbl">¿Tienes alguna zona preferencial? (ej. cerca de trabajo, escuela, familiares)</span>
+                <input placeholder="ej. Cerca de Chacao, trabajo en esa zona" value={applyForm.preferredZone} onChange={e => setApplyForm(p=>({...p,preferredZone:e.target.value}))} />
+              </div>
+              <div><span className="lbl">¿Por qué esa zona? (opcional)</span>
+                <input placeholder="ej. Para poder seguir yendo a mi trabajo sin perder el empleo" value={applyForm.preferredZoneReason} onChange={e => setApplyForm(p=>({...p,preferredZoneReason:e.target.value}))} />
+              </div>
+
+              <div style={{ display:"flex", gap:12 }}>
+                <button className="btn-outline" onClick={() => setStep(2)}>← Atrás</button>
+                <button className="btn-primary" style={{ flex:1 }} onClick={() => setStep(4)}>Siguiente →</button>
+              </div>
+            </div>
+          )}
+
+          {step === 4 && (
+            <div style={{ display:"flex", flexDirection:"column", gap:18 }}>
+              <h3 style={{ fontSize:20, fontWeight:800, color:P.purple }}>Una referencia y confirmación final</h3>
+
+              <div><span className="lbl">Nombre de una persona de referencia (familiar, amigo, vecino, jefe)</span>
+                <input placeholder="Nombre completo" value={applyForm.referenceName} onChange={e => setApplyForm(p=>({...p,referenceName:e.target.value}))} />
+              </div>
+              <div><span className="lbl">Contacto de esa referencia</span>
+                <input placeholder="Teléfono o email" value={applyForm.referenceContact} onChange={e => setApplyForm(p=>({...p,referenceContact:e.target.value}))} />
+              </div>
+
               <div style={{ background:P.lilaBg, border:`1.5px solid ${P.purple}`, borderRadius:10, padding:"14px 16px", fontSize:13, color:P.purple, lineHeight:1.65 }}>
                 📞 Después de enviar, el anfitrión te contactará directamente. También puedes escribirle a: <strong>{selectedListing.phone}</strong>
               </div>
@@ -750,7 +839,7 @@ export default function TechoVenezuela() {
               </div>
 
               <div style={{ display:"flex", gap:12 }}>
-                <button className="btn-outline" onClick={() => setStep(1)}>← Atrás</button>
+                <button className="btn-outline" onClick={() => setStep(3)}>← Atrás</button>
                 <button className="btn-primary" style={{ flex:1 }} onClick={submitApplyForm} disabled={submitting}>
                   {submitting ? "Enviando..." : "Enviar solicitud →"}
                 </button>
