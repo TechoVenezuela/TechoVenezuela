@@ -1,12 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const SUPABASE_URL = "https://qzouyhpdvzmcpgluuacd.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6b3VoeXBkdnptY3BnbHV1YWNkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3OTgyNjQsImV4cCI6MjA5ODM3NDI2NH0.-Ax1d8EQoh7_P1eVGF4brqwRGi75qmyPoSLeiEtR0Cs";
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 const ESTADOS_VENEZUELA = ["La Guaira (zona más afectada)","Caracas","Yaracuy","Carabobo","Aragua","Miranda","Vargas","Falcón","Lara","Zulia","Mérida","Táchira","Barinas","Portuguesa","Guárico","Anzoátegui","Bolívar","Monagas","Sucre","Nueva Esparta","Otro estado"];
 
-const MOCK_LISTINGS = [
-  { id:1, hostName:"Carmen Valera", estado:"Caracas", zone:"Petare", photos:["https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80"], roomType:"Habitación privada con cama", maxGuests:3, maxDuration:"2 meses", offers:["Cama y colchón","Agua (cisterna propia)","Cocina de gas compartida","Baño compartido"], accepts:["Familias con niños pequeños","Madres solas","Adultos mayores"], vetProcess:"Llamada telefónica + verificación de cédula de identidad", story:"Mi casa resistió gracias a que es de hace 40 años. Tengo un cuarto que puedo dar mientras la gente vuelve a pararse. Somos venezolanos, nos ayudamos.", available:true, badge:"Verificada", hasElectricity:false, hasWater:true, hasGas:true, phone:"0414-1234567" },
-  { id:2, hostName:"Familia Suárez-Marcano", estado:"Aragua", zone:"Maracay centro", photos:["https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80"], roomType:"Sala habilitada como dormitorio", maxGuests:5, maxDuration:"1 mes", offers:["Colchones en el piso","Planta eléctrica 4 horas/día","Nevera encendida en horario","Comida básica incluida"], accepts:["Familias completas","Personas mayores","Personas con discapacidad"], vetProcess:"Solo cédula venezolana vigente", story:"Tenemos casa propia de dos pisos. El segundo piso lo podemos compartir. No pedimos nada a cambio, solo que cuiden el espacio.", available:true, badge:"Anfitrión Solidario", hasElectricity:true, hasWater:true, hasGas:false, phone:"0424-7654321" },
-  { id:3, hostName:"Roberto Angulo", estado:"Carabobo", zone:"Valencia Norte", photos:["https://images.unsplash.com/photo-1484154218962-a197022b5858?w=600&q=80"], roomType:"Habitación privada", maxGuests:2, maxDuration:"3 meses", offers:["Cama matrimonial","Baño privado","Acceso a cocina","Conexión a internet (Cantv)"], accepts:["Parejas sin hijos","Adultos solos","No fumadores dentro del hogar"], vetProcess:"Cédula + referencia de alguien conocido en común", story:"Soy carpintero. Mi casa quedó bien. Tengo un cuarto extra que no uso. Si alguien de La Guaira necesita dónde caer, que me llame.", available:true, badge:"Verificada", hasElectricity:true, hasWater:false, hasGas:true, phone:"0412-9876543" },
-];
 
 const P = {
   purple:"#7B3FA0", purpleDk:"#5A2D7A", yellow:"#F5C842", fuschia:"#D63384",
@@ -37,54 +37,95 @@ function Logo({ height = 36, light = false }) {
 }
 
 // ── FORMSPREE ENDPOINT — reemplaza con tu ID real ────────
-const FORMSPREE_HOST = "https://formspree.io/f/YOUR_FORM_ID";
-const FORMSPREE_GUEST = "https://formspree.io/f/YOUR_FORM_ID_2";
-
 export default function TechoVenezuela() {
   const [view, setView] = useState("home");
   const [selectedListing, setSelectedListing] = useState(null);
   const [filterEstado, setFilterEstado] = useState("Todos");
   const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
+  const [listings, setListings] = useState([]);
+  const [loadingListings, setLoadingListings] = useState(true);
+
+  useEffect(() => {
+    async function fetchListings() {
+      setLoadingListings(true);
+      const { data, error } = await supabase
+        .from("anfitriones")
+        .select("*")
+        .eq("aprobado", true)
+        .eq("disponible", true)
+        .order("created_at", { ascending: false });
+      if (!error && data) setListings(data);
+      setLoadingListings(false);
+    }
+    fetchListings();
+  }, []);
+
+  const filteredListings = filterEstado === "Todos"
+    ? listings
+    : listings.filter(l => l.estado && l.estado.includes(filterEstado.replace(" (zona más afectada)","")));
+
   const [hostForm, setHostForm] = useState({ name:"", phone:"", estado:"", zone:"", roomType:"", maxGuests:1, maxDuration:"", story:"", offers:[], accepts:[], vetProcess:"", hasElectricity:false, hasWater:false, hasGas:false });
   const [applyForm, setApplyForm] = useState({
     name:"", cedula:"", phone:"", adults:1, children:0, situation:"", fromEstado:"", needDuration:"", hasElderlyOrDisabled:false,
-    // Condición de la vivienda
-    homeCondition:"", homeDamage:"",
-    // Verificación
-    hasCriminalRecord:"", criminalRecordExplain:"", canVideoCall:"",
-    // Preferencias
-    preferredZone:"", preferredZoneReason:"",
-    // Referencia
-    referenceName:"", referenceContact:"",
+    homeCondition:"", homeDamage:"", hasCriminalRecord:"", criminalRecordExplain:"", canVideoCall:"",
+    preferredZone:"", preferredZoneReason:"", referenceName:"", referenceContact:"",
   });
 
   const offerOptions = ["Cama con colchón","Colchones en el piso","Ropa de cama","Agua (cisterna/pozo)","Cocina de gas","Nevera","Planta eléctrica","Baño privado","Baño compartido","Comida básica incluida","Acceso a patio"];
   const acceptOptions = ["Familias con niños","Madres solas","Adultos mayores","Personas con discapacidad","Adultos solos","Parejas","Mascotas pequeñas","Personas enfermas"];
-  const listings = filterEstado === "Todos" ? MOCK_LISTINGS : MOCK_LISTINGS.filter(l => l.estado.includes(filterEstado.replace(" (zona más afectada)","")));
   const toggleArr = (setter, field, item) => setter(prev => ({ ...prev, [field]: prev[field].includes(item) ? prev[field].filter(i => i !== item) : [...prev[field], item] }));
 
   async function submitHostForm() {
     setSubmitting(true);
-    try {
-      await fetch(FORMSPREE_HOST, {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ ...hostForm, offers: hostForm.offers.join(", "), accepts: hostForm.accepts.join(", ") })
-      });
-    } catch(e) {}
+    const { error } = await supabase.from("anfitriones").insert([{
+      nombre: hostForm.name,
+      telefono: hostForm.phone,
+      estado: hostForm.estado,
+      zona: hostForm.zone,
+      tipo_espacio: hostForm.roomType,
+      max_personas: parseInt(hostForm.maxGuests),
+      max_duracion: hostForm.maxDuration,
+      historia: hostForm.story,
+      ofrece: hostForm.offers.join(", "),
+      acepta: hostForm.accepts.join(", "),
+      proceso_verificacion: hostForm.vetProcess,
+      tiene_electricidad: hostForm.hasElectricity,
+      tiene_agua: hostForm.hasWater,
+      tiene_gas: hostForm.hasGas,
+      aprobado: false,
+      disponible: false,
+    }]);
     setSubmitting(false);
+    if (error) { alert("Hubo un error al enviar. Por favor intenta de nuevo."); return; }
     setView("success-host");
   }
 
   async function submitApplyForm() {
     setSubmitting(true);
-    try {
-      await fetch(FORMSPREE_GUEST, {
-        method:"POST", headers:{"Content-Type":"application/json"},
-        body: JSON.stringify({ ...applyForm, listingHost: selectedListing?.hostName, listingZone: selectedListing?.zone })
-      });
-    } catch(e) {}
+    const { error } = await supabase.from("solicitantes").insert([{
+      nombre: applyForm.name,
+      cedula: applyForm.cedula,
+      telefono: applyForm.phone,
+      from_estado: applyForm.fromEstado,
+      adultos: parseInt(applyForm.adults),
+      ninos: parseInt(applyForm.children),
+      tiene_adulto_mayor_discapacidad: applyForm.hasElderlyOrDisabled,
+      situacion: applyForm.situation,
+      condicion_vivienda: applyForm.homeCondition,
+      danos_vivienda: applyForm.homeDamage,
+      duracion_necesaria: applyForm.needDuration,
+      antecedentes_penales: applyForm.hasCriminalRecord,
+      explicacion_antecedentes: applyForm.criminalRecordExplain,
+      puede_videollamada: applyForm.canVideoCall,
+      zona_preferida: applyForm.preferredZone,
+      razon_zona_preferida: applyForm.preferredZoneReason,
+      referencia_nombre: applyForm.referenceName,
+      referencia_contacto: applyForm.referenceContact,
+      estado_caso: "pendiente",
+    }]);
     setSubmitting(false);
+    if (error) { alert("Hubo un error al enviar. Por favor intenta de nuevo."); return; }
     setView("success-apply");
   }
 
@@ -205,7 +246,7 @@ export default function TechoVenezuela() {
               <span style={{ color:P.fuschia, fontWeight:700, cursor:"pointer", fontSize:14 }} onClick={() => setView("listings")}>Ver todos →</span>
             </div>
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(300px,1fr))", gap:24 }}>
-              {MOCK_LISTINGS.filter(l => l.available).slice(0,2).map(l => (
+              {listings.filter(l => l.disponible).slice(0,2).map(l => (
                 <ListingCard key={l.id} listing={l} P={P} onClick={() => { setSelectedListing(l); setView("listing"); }} />
               ))}
             </div>
@@ -522,15 +563,20 @@ export default function TechoVenezuela() {
               ))}
             </div>
           </div>
-          {listings.length === 0 ? (
+          {loadingListings ? (
+            <div style={{ textAlign:"center", padding:72, color:P.muted }}>
+              <div style={{ fontSize:48, marginBottom:16 }}>⏳</div>
+              <p style={{ fontSize:15 }}>Cargando espacios disponibles...</p>
+            </div>
+          ) : filteredListings.length === 0 ? (
             <div style={{ textAlign:"center", padding:72, color:P.muted }}>
               <div style={{ fontSize:48, marginBottom:16 }}>🔍</div>
-              <p style={{ fontSize:15 }}>Todavía no hay espacios en este estado.</p>
+              <p style={{ fontSize:15 }}>Todavía no hay espacios aprobados en este estado.</p>
               <button className="btn-primary" style={{ marginTop:24 }} onClick={() => { setView("offer"); setStep(1); }}>Ofrecer el primero</button>
             </div>
           ) : (
             <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fill,minmax(310px,1fr))", gap:26 }}>
-              {listings.map(l => <ListingCard key={l.id} listing={l} P={P} onClick={() => { setSelectedListing(l); setView("listing"); }} />)}
+              {filteredListings.map(l => <ListingCard key={l.id} listing={l} P={P} onClick={() => { setSelectedListing(l); setView("listing"); }} />)}
             </div>
           )}
         </div>
@@ -540,22 +586,22 @@ export default function TechoVenezuela() {
       {view === "listing" && selectedListing && (
         <div style={{ maxWidth:780, margin:"0 auto", padding:"44px 24px" }}>
           <button onClick={() => setView("listings")} style={{ background:"none", border:"none", color:P.fuschia, cursor:"pointer", fontWeight:700, fontSize:15, marginBottom:28 }}>← Volver</button>
-          <img src={selectedListing.photos[0]} alt="espacio" style={{ width:"100%", height:300, objectFit:"cover", borderRadius:16, marginBottom:28 }} />
+          <img src={selectedListing.foto_url || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80"} alt="espacio" style={{ width:"100%", height:300, objectFit:"cover", borderRadius:16, marginBottom:28 }} />
           <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start", flexWrap:"wrap", gap:16, marginBottom:24 }}>
             <div>
-              <span className={`badge ${selectedListing.badge==="Anfitrión Solidario"?"badge-fuschia":"badge-purple"}`}>{selectedListing.badge}</span>
-              <h1 style={{ fontSize:28, fontWeight:900, color:P.purple, marginTop:10, marginBottom:4, letterSpacing:"-0.5px" }}>{selectedListing.roomType}</h1>
-              <p style={{ color:P.muted, fontSize:15 }}>📍 {selectedListing.zone} — {selectedListing.estado}</p>
+              <span className="badge badge-purple">Verificada</span>
+              <h1 style={{ fontSize:28, fontWeight:900, color:P.purple, marginTop:10, marginBottom:4, letterSpacing:"-0.5px" }}>{selectedListing.tipo_espacio}</h1>
+              <p style={{ color:P.muted, fontSize:15 }}>📍 {selectedListing.zona} — {selectedListing.estado}</p>
             </div>
-            <div style={{ background:selectedListing.available ? P.greenBg : P.coralBg, borderRadius:12, padding:"12px 20px", textAlign:"center" }}>
-              <div style={{ fontSize:14, fontWeight:700, color:selectedListing.available ? "#1A7A4A" : "#C0392B" }}>{selectedListing.available ? "✅ Disponible" : "❌ No disponible"}</div>
-              <div style={{ fontSize:12, color:P.muted, marginTop:4 }}>Hasta {selectedListing.maxGuests} persona{selectedListing.maxGuests>1?"s":""} · {selectedListing.maxDuration}</div>
+            <div style={{ background:selectedListing.disponible ? P.greenBg : P.coralBg, borderRadius:12, padding:"12px 20px", textAlign:"center" }}>
+              <div style={{ fontSize:14, fontWeight:700, color:selectedListing.disponible ? "#1A7A4A" : "#C0392B" }}>{selectedListing.disponible ? "✅ Disponible" : "❌ No disponible"}</div>
+              <div style={{ fontSize:12, color:P.muted, marginTop:4 }}>Hasta {selectedListing.max_personas} persona{selectedListing.max_personas>1?"s":""} · {selectedListing.max_duracion}</div>
             </div>
           </div>
           <div style={{ background:P.cardBg, borderRadius:14, padding:"20px 24px", marginBottom:20, boxShadow:`0 2px 12px rgba(123,63,160,0.07)` }}>
             <span className="lbl">Servicios básicos</span>
             <div style={{ display:"flex", gap:24, flexWrap:"wrap", marginTop:8 }}>
-              {[[selectedListing.hasElectricity,"⚡","Electricidad"],[selectedListing.hasWater,"💧","Agua"],[selectedListing.hasGas,"🔥","Gas"]].map(([has,icon,label]) => (
+              {[[selectedListing.tiene_electricidad,"⚡","Electricidad"],[selectedListing.tiene_agua,"💧","Agua"],[selectedListing.tiene_gas,"🔥","Gas"]].map(([has,icon,label]) => (
                 <span key={label} style={{ fontSize:14, fontWeight:600, color:has?"#1A7A4A":P.coral, display:"flex", alignItems:"center", gap:6 }}>
                   <span style={{ width:9, height:9, borderRadius:"50%", background:has?"#2ECC71":P.coral, display:"inline-block" }} />
                   {icon} {has ? label : `Sin ${label.toLowerCase()}`}
@@ -566,31 +612,31 @@ export default function TechoVenezuela() {
           <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:18, marginBottom:20 }}>
             <div style={{ background:P.cardBg, borderRadius:14, padding:"20px 22px", boxShadow:`0 2px 12px rgba(123,63,160,0.07)` }}>
               <span className="lbl">Qué ofrece</span>
-              {selectedListing.offers.map(o => <div key={o} style={{ marginBottom:8, fontSize:13, display:"flex", gap:8 }}>✅ {o}</div>)}
+              {(selectedListing.ofrece||"").split(", ").filter(Boolean).map(o => <div key={o} style={{ marginBottom:8, fontSize:13, display:"flex", gap:8 }}>✅ {o}</div>)}
             </div>
             <div style={{ background:P.cardBg, borderRadius:14, padding:"20px 22px", boxShadow:`0 2px 12px rgba(123,63,160,0.07)` }}>
               <span className="lbl">A quién recibe</span>
-              {selectedListing.accepts.map(a => <div key={a} style={{ marginBottom:8, fontSize:13, display:"flex", gap:8 }}>👥 {a}</div>)}
+              {(selectedListing.acepta||"").split(", ").filter(Boolean).map(a => <div key={a} style={{ marginBottom:8, fontSize:13, display:"flex", gap:8 }}>👥 {a}</div>)}
             </div>
           </div>
           <div style={{ background:P.lilaBg, border:`1.5px solid ${P.purple}`, borderRadius:14, padding:"20px 24px", marginBottom:20 }}>
             <span className="lbl" style={{ color:P.purple }}>Lo que dice el anfitrión</span>
-            <p style={{ color:"#4A3560", lineHeight:1.75, fontStyle:"italic", fontSize:15, marginTop:8 }}>"{selectedListing.story}"</p>
-            <p style={{ marginTop:12, fontWeight:700, color:P.purple, fontSize:14 }}>— {selectedListing.hostName}</p>
+            <p style={{ color:"#4A3560", lineHeight:1.75, fontStyle:"italic", fontSize:15, marginTop:8 }}>"{selectedListing.historia}"</p>
+            <p style={{ marginTop:12, fontWeight:700, color:P.purple, fontSize:14 }}>— {selectedListing.nombre}</p>
           </div>
           <div style={{ background:"#FFF9EC", border:`1.5px solid ${P.yellow}`, borderRadius:14, padding:"18px 22px", marginBottom:28 }}>
             <span className="lbl" style={{ color:"#8A6A00" }}>Proceso de verificación</span>
-            <p style={{ color:"#5A4A00", fontSize:14, marginTop:6 }}>{selectedListing.vetProcess}</p>
+            <p style={{ color:"#5A4A00", fontSize:14, marginTop:6 }}>{selectedListing.proceso_verificacion}</p>
           </div>
-          {selectedListing.available && (
+          {selectedListing.disponible && (
             <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
               <button className="btn-primary" style={{ width:"100%", fontSize:16, padding:16 }} onClick={() => { setView("apply"); setStep(1); }}>Solicitar este espacio</button>
-              <a href={`https://wa.me/58${selectedListing.phone.replace(/^0/,"").replace(/-/g,"")}`} target="_blank" rel="noreferrer"
+              <a href={`https://wa.me/58${(selectedListing.telefono||"").replace(/^0/,"").replace(/-/g,"")}`} target="_blank" rel="noreferrer"
                 style={{ display:"block", background:"#25D366", color:"#fff", textAlign:"center", padding:"14px", borderRadius:10, fontWeight:700, fontSize:15, textDecoration:"none" }}>
                 💬 Escribir por WhatsApp directamente
               </a>
               <div style={{ background:P.white, borderRadius:10, padding:"14px 18px", textAlign:"center", fontSize:14, color:P.muted, border:`1px solid ${P.border}` }}>
-                📞 Llamar: <strong style={{ color:P.text }}>{selectedListing.phone}</strong>
+                📞 Llamar: <strong style={{ color:P.text }}>{selectedListing.telefono}</strong>
               </div>
             </div>
           )}
@@ -913,31 +959,31 @@ function ListingCard({ listing, P, onClick }) {
   return (
     <div className="card" onClick={onClick}>
       <div style={{ position:"relative" }}>
-        <img src={listing.photos[0]} alt="espacio" style={{ width:"100%", height:195, objectFit:"cover" }} />
-        {!listing.available && (
+        <img src={listing.foto_url || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80"} alt="espacio" style={{ width:"100%", height:195, objectFit:"cover" }} />
+        {!listing.disponible && (
           <div style={{ position:"absolute", inset:0, background:"rgba(90,45,122,0.6)", display:"flex", alignItems:"center", justifyContent:"center" }}>
             <span style={{ color:"#fff", fontWeight:700 }}>No disponible</span>
           </div>
         )}
         <div style={{ position:"absolute", top:12, left:12 }}>
-          <span className={`badge ${listing.badge==="Anfitrión Solidario"?"badge-fuschia":"badge-purple"}`}>{listing.badge}</span>
+          <span className="badge badge-purple">Verificada</span>
         </div>
       </div>
       <div style={{ padding:20 }}>
         <div style={{ display:"flex", justifyContent:"space-between", alignItems:"flex-start" }}>
-          <h3 style={{ fontSize:16, fontWeight:800, color:P.purple }}>{listing.roomType}</h3>
-          <span style={{ fontSize:11, color:P.muted, whiteSpace:"nowrap", marginLeft:8 }}>{listing.maxDuration}</span>
+          <h3 style={{ fontSize:16, fontWeight:800, color:P.purple }}>{listing.tipo_espacio}</h3>
+          <span style={{ fontSize:11, color:P.muted, whiteSpace:"nowrap", marginLeft:8 }}>{listing.max_duracion}</span>
         </div>
-        <p style={{ color:P.muted, fontSize:12, margin:"4px 0 12px" }}>📍 {listing.zone} · {listing.estado}</p>
+        <p style={{ color:P.muted, fontSize:12, margin:"4px 0 12px" }}>📍 {listing.zona} · {listing.estado}</p>
         <div style={{ display:"flex", gap:12, marginBottom:12 }}>
-          <span style={{ fontSize:11, fontWeight:600, color:listing.hasElectricity?"#1A7A4A":P.coral }}>⚡ {listing.hasElectricity?"Luz":"Sin luz"}</span>
-          <span style={{ fontSize:11, fontWeight:600, color:listing.hasWater?"#1A7A4A":P.coral }}>💧 {listing.hasWater?"Agua":"Sin agua"}</span>
-          <span style={{ fontSize:11, fontWeight:600, color:listing.hasGas?"#1A7A4A":P.coral }}>🔥 {listing.hasGas?"Gas":"Sin gas"}</span>
+          <span style={{ fontSize:11, fontWeight:600, color:listing.tiene_electricidad?"#1A7A4A":P.coral }}>⚡ {listing.tiene_electricidad?"Luz":"Sin luz"}</span>
+          <span style={{ fontSize:11, fontWeight:600, color:listing.tiene_agua?"#1A7A4A":P.coral }}>💧 {listing.tiene_agua?"Agua":"Sin agua"}</span>
+          <span style={{ fontSize:11, fontWeight:600, color:listing.tiene_gas?"#1A7A4A":P.coral }}>🔥 {listing.tiene_gas?"Gas":"Sin gas"}</span>
         </div>
-        <p style={{ color:"#4A3560", fontSize:13, lineHeight:1.6, marginBottom:14 }}>"{listing.story.slice(0,85)}..."</p>
+        <p style={{ color:"#4A3560", fontSize:13, lineHeight:1.6, marginBottom:14 }}>"{(listing.historia||"").slice(0,85)}..."</p>
         <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between" }}>
-          <span style={{ fontWeight:700, color:P.fuschia, fontSize:13 }}>— {listing.hostName}</span>
-          <span style={{ fontSize:12, fontWeight:600, color:listing.available?"#1A7A4A":P.muted }}>{listing.available?"✅ Disponible":"⏸ Ocupado"}</span>
+          <span style={{ fontWeight:700, color:P.fuschia, fontSize:13 }}>— {listing.nombre}</span>
+          <span style={{ fontSize:12, fontWeight:600, color:listing.disponible?"#1A7A4A":P.muted }}>{listing.disponible?"✅ Disponible":"⏸ Ocupado"}</span>
         </div>
       </div>
     </div>
